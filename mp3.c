@@ -12,17 +12,16 @@ typedef struct mp3 {
     int runtime;
     struct mp3 *next;
     struct mp3 *prev;
+    struct mp3 *head;
+    struct mp3 *tail;
 } mp3_t;
 
 void enter(mp3_t **first ){
     char  buffer[BUFFERSIZE];
     int   len;
-    mp3_t *mp3 = NULL;
-    mp3_t *tmp = NULL;
+    mp3_t *mp3 = {NULL,NULL,0,0,NULL,NULL,NULL,NULL};
+    mp3_t *tmp = {NULL,NULL,0,0,NULL,NULL,NULL,NULL};
     tmp = *first;
-    while(tmp && tmp->next){
-      tmp = tmp->next;
-    }
     static int nodeCount = 0;
     printf("Enter a name: ");
   if (fgets(buffer, BUFFERSIZE , stdin) != NULL)
@@ -55,14 +54,17 @@ void enter(mp3_t **first ){
     printf("Duration: %d\n",mp3->runtime);
 
     nodeCount++;
-    if(nodeCount == 1 || first == NULL){
+    if(nodeCount == 1){
         **first = *mp3;
+        tmp->head = *first;
+        tmp->tail = *first;
         mp3->next = NULL;
         mp3->prev = NULL;
     }
     else{
-        tmp->next = mp3;
-        mp3->prev = tmp;
+        tmp->tail->next = mp3;
+        mp3->prev = tmp->tail;
+        tmp->tail = mp3;
         mp3->next = NULL;
     }
 
@@ -74,7 +76,7 @@ void delete(mp3_t **first){
   char  buffer[BUFFERSIZE];
   int   len;
   char *artistDel;
-  mp3_t *tmp = NULL;
+  mp3_t *tmp = {NULL,NULL,0,0,NULL,NULL,NULL,NULL};
   tmp = *first;
   printf("Enter the Name of the Artist you would like to delete: ");
   if (fgets(buffer, BUFFERSIZE , stdin) != NULL)
@@ -160,7 +162,7 @@ else{
 
 void freeList(mp3_t *first)
 {
-  mp3_t *tmp = NULL;
+  mp3_t *tmp = {NULL,NULL,0,0,NULL,NULL,NULL,NULL};
   tmp = first;
   while(first != NULL){
     tmp = first;
@@ -171,12 +173,12 @@ void freeList(mp3_t *first)
 }
 
 int main(){
-    mp3_t *first = NULL;
-    enter(&first);
-    enter(&first);
+    // mp3_t *first = {NULL,NULL,0,0,NULL,NULL,NULL,NULL};
     // enter(&first);
-    delete(&first);
-    printListForward(first);
-    freeList(first);
+    // enter(&first);
+    // // enter(&first);
+    // delete(&first);
+    // printListForward(first);
+    // freeList(first);
 	return 0;
 }
