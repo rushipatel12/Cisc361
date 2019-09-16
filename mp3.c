@@ -17,8 +17,8 @@ typedef struct mp3 {
 void enter(mp3_t **first ){
     char  buffer[BUFFERSIZE];
     int   len;
-    mp3_t *mp3;
-    mp3_t *tmp;
+    mp3_t *mp3 = NULL;
+    mp3_t *tmp = NULL;
     tmp = *first;
     while(tmp && tmp->next){
       tmp = tmp->next;
@@ -74,10 +74,8 @@ void delete(mp3_t **first){
   char  buffer[BUFFERSIZE];
   int   len;
   char *artistDel;
-  mp3_t *tmp;
+  mp3_t *tmp = NULL;
   tmp = *first;
-  mp3_t *tmpFirst;
-  tmpFirst = *first;
   printf("Enter the Name of the Artist you would like to delete: ");
   if (fgets(buffer, BUFFERSIZE , stdin) != NULL)
   {
@@ -162,7 +160,7 @@ else{
 
 void freeList(mp3_t *first)
 {
-  mp3_t *tmp;
+  mp3_t *tmp = NULL;
   tmp = first;
   while(first != NULL){
     tmp = first;
