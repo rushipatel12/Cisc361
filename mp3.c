@@ -171,7 +171,7 @@ void freeList(mp3_t *first)
 }
 
 int main(){
-    mp3_t *first;
+    mp3_t *first = NULL;
     enter(&first);
     enter(&first);
     // enter(&first);
