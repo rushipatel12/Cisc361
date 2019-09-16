@@ -20,7 +20,7 @@ void enter(mp3_t **first ){
     mp3_t *mp3;
     mp3_t *tmp;
     tmp = *first;
-    while(tmp->next != NULL){
+    while(tmp && tmp->next){
       tmp = tmp->next;
     }
     static int nodeCount = 0;
@@ -147,7 +147,7 @@ else{
   }
   printf("These are all the Mp3's in the Linked List in Reverse\n");
   while(last != NULL){
-    printf("");
+    // printf("");
     printf("Name is [%s], ", last->artist);
     printf("Song title is [%s], ", last->songName);
     printf("Year is: [%d], ", last->year);
