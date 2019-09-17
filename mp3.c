@@ -87,12 +87,7 @@ void delete(mp3_t **first, mp3_t **tail){
     if(strcmp(tmp->artist,artistDel)==0){
         deleteMP3(tmp,first,tail);
     }
-    if(tmp->next == NULL){
-      break;
-    }
-    else{
     tmp = tmp->next;
-    }
 
   }
   free(artistDel);
