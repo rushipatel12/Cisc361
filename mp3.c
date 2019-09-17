@@ -86,7 +86,7 @@ void delete(mp3_t **first){
     if(strcmp(tmp->artist,artistDel)==0){
         deleteMP3(tmp,first);
     }
-    tmpFree = tmp;
+    // tmpFree = tmp;
     tmp = tmp->next;
     // free(tmpFree->artist);
     // free(tmpFree->songName);
@@ -100,6 +100,8 @@ void delete(mp3_t **first){
 
 void deleteMP3(mp3_t *deleteArtist, mp3_t **tmpFirst){
   printf("CAllED2");
+  mp3_t *tmpFree = NULL;
+  tmpFree = deleteArtist;
   if(*tmpFirst == NULL){
     return;
   }
@@ -113,6 +115,10 @@ void deleteMP3(mp3_t *deleteArtist, mp3_t **tmpFirst){
   if(deleteArtist->prev != NULL){
     deleteArtist->prev->next = deleteArtist->next;
   }
+  free(tmpFree->artist);
+  free(tmpFree->songName);
+  free(tmpFree);
+
 
 }
 
