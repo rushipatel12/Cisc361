@@ -19,6 +19,7 @@ void enter(mp3_t **first, mp3_t **tail ){
     int   len;
     mp3_t *mp3 = NULL;
     printf("Enter a name: ");
+    getchar();
   if (fgets(buffer, BUFFERSIZE , stdin) != NULL)
   {
     len = (int) strlen(buffer);
@@ -69,6 +70,7 @@ void delete(mp3_t **first){
   char *artistDel;
   mp3_t *tmp = NULL;
   tmp = *first;
+  getchar();
   printf("Enter the Name of the Artist you would like to delete: ");
   if (fgets(buffer, BUFFERSIZE , stdin) != NULL)
   {
@@ -172,12 +174,49 @@ void freeList(mp3_t *first){
 int main(){
     mp3_t *first = NULL;
     mp3_t *tail = NULL;
-    enter(&first, &tail);
     // enter(&first, &tail);
     // enter(&first, &tail);
-    delete(&first);
-    printListForward(first);
-    printListReverse(tail);
-    freeList(first);
+    // // enter(&first, &tail);
+    // delete(&first);
+    // printListForward(first);
+    // printListReverse(tail);
+    // freeList(first);
+    // printListForward(first);
+
+    char options;
+    printf("MP3 Doubly Linked List");
+    printf("\n\n");
+    
+    do{
+      printf("Menu Options\n");
+      printf("A. Add MP3 data to the List\n");
+      printf("B. Delete an Artist from the List\n");
+      printf("C. Print the MP3 data in the order it was added (Forward)\n");
+      printf("D. Print the MP3 data by the most recent addition (Reverse)\n");
+      printf("E. Exit the program\n");
+      printf("Choose an option from above: ");
+      scanf(" %c",&options);
+
+      switch(options){
+        case 'A':
+          enter(&first,&tail);
+          break;
+        case 'B':
+          delete(&first);
+          break;
+        case 'C':
+          printListForward(first);
+          break;
+        case 'D':
+          printListReverse(tail);
+          break;
+        case 'E':
+          break;
+        default:
+          printf("input is invalid");
+          break;
+      } 
+    } while(options != 'E');
+      freeList(first);
 	return 0;
 }
