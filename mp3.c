@@ -86,7 +86,12 @@ void delete(mp3_t **first){
     if(strcmp(tmp->artist,artistDel)==0){
         deleteMP3(tmp,first);
     }
+    tmpFree = tmp;
     tmp = tmp->next;
+    // free(tmpFree->artist);
+    // free(tmpFree->songName);
+    // free(tmpFree);
+    // free(artistDel);
   }
 
 
@@ -159,6 +164,8 @@ void freeList(mp3_t *first)
   while(first != NULL){
     tmp = first;
     first = first->next;
+    free(tmp->artist);
+    free(tmp->songName);
     free(tmp);
   }
 
