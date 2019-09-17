@@ -63,7 +63,7 @@ void enter(mp3_t **first, mp3_t **tail ){
 
 }
 
-void delete(mp3_t **first){
+void delete(mp3_t **first, mp3_t **tail){
   printf("CAllED1");
   char  buffer[BUFFERSIZE];
   int   len;
@@ -85,7 +85,7 @@ void delete(mp3_t **first){
   while(tmp != NULL){
     printf("enterd");
     if(strcmp(tmp->artist,artistDel)==0){
-        deleteMP3(tmp,first);
+        deleteMP3(tmp,first,tail);
     }
     tmp = tmp->next;
 
@@ -96,7 +96,7 @@ void delete(mp3_t **first){
 
 }
 
-void deleteMP3(mp3_t *deleteArtist, mp3_t **tmpFirst){
+void deleteMP3(mp3_t *deleteArtist, mp3_t **tmpFirst, mp3_t **tmpTail){
   printf("CAllED2");
   mp3_t *tmpFree = NULL;
   tmpFree = deleteArtist;
@@ -106,6 +106,9 @@ void deleteMP3(mp3_t *deleteArtist, mp3_t **tmpFirst){
   if(deleteArtist->prev == NULL){
     printf("first");
     *tmpFirst = deleteArtist->next;
+  }
+  if(deleteArtist->next == NULL){
+    *tmpTail = deleteArtist->prev;
   }
   if(deleteArtist->next != NULL){
     deleteArtist->next->prev = deleteArtist->prev;
@@ -202,7 +205,7 @@ int main(){
           enter(&first,&tail);
           break;
         case 'B':
-          delete(&first);
+          delete(&first,&tail);
           break;
         case 'C':
           printListForward(first);
