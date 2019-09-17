@@ -25,6 +25,7 @@ void enter(mp3_t **first, mp3_t **tail ){
     len = (int) strlen(buffer);
     buffer[len - 1] = '\0';                 
     mp3 = (mp3_t *) malloc(sizeof(mp3_t));
+    mp3->next = mp3->prev = NULL;
     mp3->artist = (char *) malloc(len);
     strcpy(mp3->artist, buffer);
   }
