@@ -49,7 +49,7 @@ void enter(mp3_t **first, mp3_t **tail ){
     printf("Year: %d\n",mp3->year);
     printf("Duration: %d\n",mp3->runtime);
 
-    if(!(*first)){
+    if(*first == NULL){
         *first = mp3;
         *tail = mp3;
         (*first)->prev = NULL;
@@ -82,7 +82,7 @@ void delete(mp3_t **first, mp3_t **tail){
     printf("Name is [%s]...\n", artistDel);
   }
 
-  while(tmp){
+  while(tmp != NULL){
     printf("enterd");
     if(strcmp(tmp->artist,artistDel)==0){
         deleteMP3(tmp,first,tail);
@@ -125,12 +125,12 @@ void deleteMP3(mp3_t *deleteArtist, mp3_t **tmpFirst, mp3_t **tmpTail){
 
 
 void printListForward(mp3_t *first){
-  if (!(first)) { 
+  if (first == NULL) { 
       printf("theres nothing in this list");
   }
   else{
     printf("These are all the Mp3's in the Linked List Forward\n");
-    while(first){
+    while(first != NULL){
       printf("Name is [%s], ", first->artist);
       printf("Song title is [%s], ", first->songName);
       printf("Year is: [%d], ", first->year);
@@ -141,12 +141,12 @@ void printListForward(mp3_t *first){
 }
 
 void printListReverse(mp3_t *tail){
-  if(!(tail)){ 
+  if(tail == NULL){ 
     printf("theres nothing in this list");
   }
   else{
     printf("These are all the Mp3's in the Linked List in Reverse\n");
-    while(tail){
+    while(tail != NULL){
       printf("Name is [%s], ", tail->artist);
       printf("Song title is [%s], ", tail->songName);
       printf("Year is: [%d], ", tail->year);
@@ -162,7 +162,7 @@ void freeList(mp3_t *first){
   printf("Entered");
   mp3_t *tmp = NULL;
   tmp = first;
-  while(first){
+  while(first != NULL){
     tmp = first;
     first = first->next;
     free(tmp->artist);
