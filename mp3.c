@@ -83,7 +83,7 @@ void delete(mp3_t **first, mp3_t **tail){
     printf("Name is [%s]...\n", artistDel);
   }
 
-  while(tmp){
+  while(tmp != NULL){
     printf("enterd");
     if(strcmp(tmp->artist,artistDel)==0){
         deleteMP3(tmp,first,tail);
@@ -104,17 +104,17 @@ void deleteMP3(mp3_t *deleteArtist, mp3_t **tmpFirst, mp3_t **tmpTail){
   if(!(*tmpFirst)){
     return;
   }
-  if(!(deleteArtist->prev)){
+  if(deleteArtist->prev == NULL){
     printf("first");
     *tmpFirst = deleteArtist->next;
   }
-  if(!(deleteArtist->next)){
+  if(deleteArtist->next == NULL){
     *tmpTail = deleteArtist->prev;
   }
-  if(deleteArtist->next){
+  if(deleteArtist->next != NULL){
     deleteArtist->next->prev = deleteArtist->prev;
   }
-  if(deleteArtist->prev){
+  if(deleteArtist->prev != NULL){
     deleteArtist->prev->next = deleteArtist->next;
   }
   free(tmpFree->artist);
@@ -126,7 +126,7 @@ void deleteMP3(mp3_t *deleteArtist, mp3_t **tmpFirst, mp3_t **tmpTail){
 
 
 void printListForward(mp3_t *first){
-  if (!first) { 
+  if (first == NULL) { 
       printf("theres nothing in this list");
   }
   else{
