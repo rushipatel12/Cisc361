@@ -162,7 +162,7 @@ void freeList(mp3_t *first){
   printf("Entered");
   mp3_t *tmp = NULL;
   tmp = first;
-  while(first != NULL){
+  while(first){
     tmp = first;
     first = first->next;
     free(tmp->artist);
