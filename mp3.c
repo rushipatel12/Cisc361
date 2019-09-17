@@ -91,8 +91,9 @@ void delete(mp3_t **first){
     // free(tmpFree->artist);
     // free(tmpFree->songName);
     // free(tmpFree);
-    // free(artistDel);
   }
+  free(artistDel);
+
 
 
 }
