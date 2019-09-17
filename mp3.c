@@ -100,20 +100,20 @@ void deleteMP3(mp3_t *deleteArtist, mp3_t **tmpFirst, mp3_t **tmpTail){
   printf("CAllED2");
   mp3_t *tmpFree = NULL;
   tmpFree = deleteArtist;
-  if(*tmpFirst == NULL){
+  if(!(*tmpFirst)){
     return;
   }
-  if(deleteArtist->prev == NULL){
+  if(!(deleteArtist->prev)){
     printf("first");
     *tmpFirst = deleteArtist->next;
   }
-  if(deleteArtist->next == NULL){
+  if(!(deleteArtist->next)){
     *tmpTail = deleteArtist->prev;
   }
-  if(deleteArtist->next != NULL){
+  if(deleteArtist->next){
     deleteArtist->next->prev = deleteArtist->prev;
   }
-  if(deleteArtist->prev != NULL){
+  if(deleteArtist->prev){
     deleteArtist->prev->next = deleteArtist->next;
   }
   free(tmpFree->artist);
