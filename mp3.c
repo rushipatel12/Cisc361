@@ -148,7 +148,7 @@ void removeMP3(mp3_t *deleteArtist, mp3_t **tmpFirst, mp3_t **tmpTail){
 
 void forwardPrinting(mp3_t *first){
   if (first == NULL) { 
-      printf("There is no MP3 data in the List");
+      printf("There is no MP3 data in the List\n");
   }
   else{
     printf("This is MP3 data in the order it was added (Forward):\n");
@@ -170,10 +170,10 @@ void forwardPrinting(mp3_t *first){
 
 void reversePrinting(mp3_t *tail){
   if(tail == NULL){ 
-    printf("There is no MP3 data in the List");
+    printf("There is no MP3 data in the List\n");
   }
   else{
-    printf("This is the MP3 data by the most recent addition (Reverse)\n");
+    printf("This is the MP3 data by the most recent addition (Reverse):\n");
     while(tail != NULL){
       printf("The Artist is %s, ", tail->artist);
       printf("The Song title is %s, ", tail->songName);
