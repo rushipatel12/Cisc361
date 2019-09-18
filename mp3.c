@@ -14,11 +14,11 @@ typedef struct mp3 {
     struct mp3 *prev;
 } mp3_t;
 
-void enter(mp3_t **first, mp3_t **tail ){
+void enterData(mp3_t **first, mp3_t **tail ){
     char  buffer[BUFFERSIZE];
     int   len;
     mp3_t *mp3 = NULL;
-    printf("Enter a name: ");
+    printf("Enter an Artist: ");
     getchar();
   if (fgets(buffer, BUFFERSIZE , stdin) != NULL)
   {
@@ -31,7 +31,7 @@ void enter(mp3_t **first, mp3_t **tail ){
   }
 
 
-  printf("Enter a song: ");
+  printf("Enter a Song Title: ");
   if (fgets(buffer, BUFFERSIZE , stdin) != NULL)
   {
     len = (int) strlen(buffer);
@@ -44,11 +44,6 @@ void enter(mp3_t **first, mp3_t **tail ){
     printf("Enter the Duration of the Song: ");
     scanf("%d",&mp3->runtime);
     getchar();
-
-    printf("Name is [ %s]...\n", mp3->artist);
-    printf("Name is [%s]...\n", mp3->songName);
-    printf("Year: %d\n",mp3->year);
-    printf("Duration: %d\n",mp3->runtime);
 
     if(*first == NULL){
         *first = mp3;
@@ -64,8 +59,7 @@ void enter(mp3_t **first, mp3_t **tail ){
 
 }
 
-void delete(mp3_t **first, mp3_t **tail){
-  printf("CAllED1");
+void removeNode(mp3_t **first, mp3_t **tail){
   char  buffer[BUFFERSIZE];
   int   len;
   char *artistDel;
@@ -77,19 +71,16 @@ void delete(mp3_t **first, mp3_t **tail){
   if (fgets(buffer, BUFFERSIZE , stdin) != NULL)
   {
     len = (int) strlen(buffer);
-    printf("length [%d] of string %s", len, buffer); 
     buffer[len - 1] = '\0';                 
     artistDel = (char *) malloc(len);
     strcpy(artistDel, buffer);
-    printf("Name is [%s]...\n", artistDel);
   }
 
   while(tmp != NULL){
-    printf("enterd");
     if(strcmp(tmp->artist,artistDel)==0){
         tmpDel = tmp;
         tmp = tmp->next;
-        deleteMP3(tmpDel,first,tail);
+        removeMP3(tmpDel,first,tail);
     }
     else{
       tmp = tmp->next;
@@ -102,15 +93,13 @@ void delete(mp3_t **first, mp3_t **tail){
 
 }
 
-void deleteMP3(mp3_t *deleteArtist, mp3_t **tmpFirst, mp3_t **tmpTail){
-  printf("CAllED2");
+void removeMP3(mp3_t *deleteArtist, mp3_t **tmpFirst, mp3_t **tmpTail){
   mp3_t *tmpFree = NULL;
   tmpFree = deleteArtist;
   if(!(*tmpFirst)){
     return;
   }
   if(deleteArtist->prev == NULL){
-    printf("first");
     *tmpFirst = deleteArtist->next;
   }
   if(deleteArtist->next == NULL){
@@ -130,33 +119,33 @@ void deleteMP3(mp3_t *deleteArtist, mp3_t **tmpFirst, mp3_t **tmpTail){
 }
 
 
-void printListForward(mp3_t *first){
+void forwardPrinting(mp3_t *first){
   if (first == NULL) { 
-      printf("theres nothing in this list");
+      printf("There is no MP3 data in the List");
   }
   else{
-    printf("These are all the Mp3's in the Linked List Forward\n");
+    printf("This is MP3 data in the order it was added (Forward):\n");
     while(first != NULL){
-      printf("Name is [%s], ", first->artist);
-      printf("Song title is [%s], ", first->songName);
-      printf("Year is: [%d], ", first->year);
-      printf("Runtime is [%d}. \n", first->runtime);
+      printf("The Artist is %s, ", first->artist);
+      printf("The Song title is %s, ", first->songName);
+      printf("The Year is: %d, ", first->year);
+      printf("and the Duration is %d minutes. \n", first->runtime);
       first=first->next;
     }
   }
 }
 
-void printListReverse(mp3_t *tail){
+void reversePrinting(mp3_t *tail){
   if(tail == NULL){ 
-    printf("theres nothing in this list");
+    printf("There is no MP3 data in the List");
   }
   else{
-    printf("These are all the Mp3's in the Linked List in Reverse\n");
+    printf("This is the MP3 data by the most recent addition (Reverse)\n");
     while(tail != NULL){
-      printf("Name is [%s], ", tail->artist);
-      printf("Song title is [%s], ", tail->songName);
-      printf("Year is: [%d], ", tail->year);
-      printf("Runtime is [%d}. \n", tail->runtime);
+      printf("The Artist is %s, ", tail->artist);
+      printf("The Song title is %s, ", tail->songName);
+      printf("The Year is: %d, ", tail->year);
+      printf("and the Duration is %d minutes. \n", tail->runtime);
       tail = tail->prev;
     }
 }
@@ -164,8 +153,7 @@ void printListReverse(mp3_t *tail){
 
 
 
-void freeList(mp3_t *first){
-  printf("Entered");
+void clearHeap(mp3_t *first){
   mp3_t *tmp = NULL;
   tmp = first;
   while(first != NULL){
@@ -174,7 +162,6 @@ void freeList(mp3_t *first){
     free(tmp->artist);
     free(tmp->songName);
     free(tmp);
-    // printf("Year: %d",tmp->year);
   }
   
 
@@ -183,49 +170,41 @@ void freeList(mp3_t *first){
 int main(){
     mp3_t *first = NULL;
     mp3_t *tail = NULL;
-    // enter(&first, &tail);
-    // enter(&first, &tail);
-    // // enter(&first, &tail);
-    // delete(&first);
-    // printListForward(first);
-    // printListReverse(tail);
-    // freeList(first);
-    // printListForward(first);
 
-    char options;
+    char choices;
     printf("MP3 Doubly Linked List");
     printf("\n\n");
     
     do{
-      printf("Menu Options\n");
-      printf("A. Add MP3 data to the List\n");
-      printf("B. Delete an Artist from the List\n");
-      printf("C. Print the MP3 data in the order it was added (Forward)\n");
-      printf("D. Print the MP3 data by the most recent addition (Reverse)\n");
-      printf("E. Exit the program\n");
-      printf("Choose an option from above: ");
-      scanf(" %c",&options);
+      printf("Choices\n");
+      printf("1. Add MP3 data to the List\n");
+      printf("2. Delete an Artist from the List\n");
+      printf("3. Print the MP3 data in the order it was added (Forward)\n");
+      printf("4. Print the MP3 data by the most recent addition (Reverse)\n");
+      printf("5. Exit the program\n");
+      printf("Pick a choice from above: ");
+      scanf(" %c",&choices);
 
-      switch(options){
-        case 'A':
-          enter(&first,&tail);
+      switch(choices){
+        case '1':
+          enterData(&first,&tail);
           break;
-        case 'B':
-          delete(&first,&tail);
+        case '2':
+          removeNode(&first,&tail);
           break;
-        case 'C':
-          printListForward(first);
+        case '3':
+          forwardPrinting(first);
           break;
-        case 'D':
-          printListReverse(tail);
+        case '4':
+          reversePrinting(tail);
           break;
-        case 'E':
+        case '5':
           break;
         default:
-          printf("input is invalid");
+          printf("Not a choice");
           break;
       } 
-    } while(options != 'E');
-      freeList(first);
+    } while(choices != 'E');
+      clearHeap(first);
 	return 0;
 }
