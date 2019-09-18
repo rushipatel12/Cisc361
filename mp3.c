@@ -244,7 +244,7 @@ int main(){
         case '5':
           break;
         default:
-          printf("Not a choice");
+          printf("Not a choice\n");
           break;
       } 
     } while(choices != '5');
