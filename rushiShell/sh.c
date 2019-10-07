@@ -66,6 +66,14 @@ int sh( int argc, char **argv, char **envp )
       //     waitpid(pid,NULL,NULL);
       //   }
       // }
+
+      free(args);
+      free(prompt);
+      free(commandline);
+      free(pwd);
+      free(owd);
+      free(pathlist->element);
+      free(pathlist);
     }
 
     /* check for each built in command and implement */
