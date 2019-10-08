@@ -45,6 +45,8 @@ int sh( int argc, char **argv, char **envp )
     printf("[%s]%s",pwd,prompt);
     /* get command line and process */
     arg = fgets(commandline,BUFSIZ,stdin);
+    int argLen = strlen(arg);
+    arg[argLen-1]=0;
     args = stringToArray(arg);
     // printf("%s-%s",args[0],args[1]);
     if(strcmp(args[0],"exit")==0){
@@ -71,16 +73,13 @@ int sh( int argc, char **argv, char **envp )
     /* check for each built in command and implement */
 
      /*  else  program to exec */
-    {
        /* find it */
        /* do fork(), execve() and waitpid() */
 
       /* else */
         /* fprintf(stderr, "%s: Command not found.\n", args[0]); */
-    }
     freeArgs(args);
   }
-  // free(arg);
   free(args);
   free(prompt);
   free(commandline);
