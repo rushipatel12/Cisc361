@@ -68,19 +68,6 @@ int sh( int argc, char **argv, char **envp )
       // }
     }
 
-    free(args);
-    free(prompt);
-    free(commandline);
-    free(pwd);
-    free(owd);
-    // struct pathelement *tmpFree = pathlist;
-    // while(tmpFree->next != NULL){
-    //   free(pathlist->element);
-    // }
-    free(pathlist->element);
-    free(pathlist->next);
-    free(pathlist);
-
     /* check for each built in command and implement */
 
      /*  else  program to exec */
@@ -91,6 +78,19 @@ int sh( int argc, char **argv, char **envp )
       /* else */
         /* fprintf(stderr, "%s: Command not found.\n", args[0]); */
     }
+  
+  free(args);
+  free(prompt);
+  free(commandline);
+  free(pwd);
+  free(owd);
+    // struct pathelement *tmpFree = pathlist;
+    // while(tmpFree->next != NULL){
+    //   free(pathlist->element);
+    // }
+  free(pathlist->element);
+  free(pathlist->next);
+  free(pathlist);
   }
   return 0;
 } /* sh() */

@@ -40,5 +40,10 @@ struct pathelement *get_path()
     tmp->next = NULL;
   } while ( (p = strtok(NULL, ":")) );
 
+  // free(path);
+  // free(tmp->element);
+  // free(tmp->next);
+  // free(tmp);
+
   return pathlist;
 } /* end get_path() */
