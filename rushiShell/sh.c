@@ -86,7 +86,7 @@ int sh( int argc, char **argv, char **envp )
   free(owd);
     // struct pathelement *tmpFree = pathlist;
     // while(tmpFree->next != NULL){
-    //   free(pathlist->element);
+    //   free(tmpFree->element);
     // }
   free(pathlist->element);
   free(pathlist->next);
