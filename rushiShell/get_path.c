@@ -46,7 +46,8 @@ struct pathelement *get_path()
     free(tmpFree->element);
     tmpFree = tmpFree->next;
   }
-  free(tmp);
+  // free(tmp);
+  // free(path);
 
   return pathlist;
 } /* end get_path() */

@@ -84,13 +84,8 @@ int sh( int argc, char **argv, char **envp )
   free(commandline);
   free(pwd);
   free(owd);
-    // struct pathelement *tmpFree = pathlist;
-    // while(tmpFree->next != NULL){
-    //   free(tmpFree->element);
-    // }
   free(pathlist->element);
-  free(pathlist->next);
-  free(pathlist);
+  freeList(pathlist);
   }
   return 0;
 } /* sh() */
@@ -140,3 +135,13 @@ void list ( char *dir )
   the directory passed */
 } /* list() */
 
+void freeList(struct pathelement *first){
+  struct pathelement* tmp = NULL;
+   while (first != NULL)
+    {
+       tmp = first;
+       first = first->next;
+       free(tmp);
+    }
+
+}
