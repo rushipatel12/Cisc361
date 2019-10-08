@@ -33,7 +33,7 @@ int main()
     free(tmpFree2);
     tmpFree = tmpFree->next;
   }
-  // free(p);
+  free(p);
 
   return 0;
 }
