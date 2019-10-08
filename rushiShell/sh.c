@@ -73,7 +73,12 @@ int sh( int argc, char **argv, char **envp )
     free(commandline);
     free(pwd);
     free(owd);
+    // struct pathelement *tmpFree = pathlist;
+    // while(tmpFree->next != NULL){
+    //   free(pathlist->element);
+    // }
     free(pathlist->element);
+    free(pathlist->next);
     free(pathlist);
 
     /* check for each built in command and implement */

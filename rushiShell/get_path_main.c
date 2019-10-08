@@ -25,5 +25,9 @@ int main()
     p = p->next;
   }
 
+  free(p->element);
+  free(p->next);
+  free(p);
+
   return 0;
 }
