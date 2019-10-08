@@ -48,8 +48,15 @@ int sh( int argc, char **argv, char **envp )
     int argLen = strlen(arg);
     arg[argLen-1]=0;
     args = stringToArray(arg);
+    i=0;
+    argsct=0;
+    while(args[i]!=NULL){
+      argsct++;
+      i++;
+    }
+    printf("%d",argsct);
     // printf("%s-%s",args[0],args[1]);
-    if(strcmp(args[0],"exit")==0){
+    if((strcmp(args[0],"exit")==0) && argsct==1){
       go = 0;
     }
     // else{
@@ -80,6 +87,7 @@ int sh( int argc, char **argv, char **envp )
         /* fprintf(stderr, "%s: Command not found.\n", args[0]); */
     freeArgs(args);
   }
+
   free(args);
   free(prompt);
   free(commandline);
