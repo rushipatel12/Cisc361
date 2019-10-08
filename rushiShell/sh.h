@@ -8,6 +8,7 @@ char *where(char *command, struct pathelement *pathlist);
 void list ( char *dir );
 void printenv(char **envp);
 void freeList(struct pathelement *first);
+void freeArgs(char **array);
 char **stringToArray(char *input);
 
 #define PROMPTMAX 32

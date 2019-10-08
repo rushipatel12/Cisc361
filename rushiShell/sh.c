@@ -80,7 +80,7 @@ int sh( int argc, char **argv, char **envp )
         /* fprintf(stderr, "%s: Command not found.\n", args[0]); */
     }
   }
-  free(args);
+  freeArgs(args);
   free(prompt);
   free(commandline);
   free(pwd);
@@ -144,6 +144,14 @@ void freeList(struct pathelement *first){
        free(tmp);
     }
 
+}
+
+void freeArgs(char **array){
+  int i = 0;
+  while(array[i] != NULL){
+    free(array[i]);
+    i++;
+  }
 }
 
 char **stringToArray(char *input){
