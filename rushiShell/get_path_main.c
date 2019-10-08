@@ -24,12 +24,6 @@ int main()
     }
     p = p->next;
   }
-  struct pathelement *tmpFree = p;
-  while(tmpFree->next != NULL){
-    free(tmpFree->element);
-    tmpFree = tmpFree->next;
-  }
-  free(p);
 
   return 0;
 }

@@ -78,7 +78,7 @@ int sh( int argc, char **argv, char **envp )
       /* else */
         /* fprintf(stderr, "%s: Command not found.\n", args[0]); */
     }
-  
+  }
   free(args);
   free(prompt);
   free(commandline);
@@ -86,7 +86,6 @@ int sh( int argc, char **argv, char **envp )
   free(owd);
   free(pathlist->element);
   freeList(pathlist);
-  }
   return 0;
 } /* sh() */
 
