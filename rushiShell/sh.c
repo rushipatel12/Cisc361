@@ -47,7 +47,7 @@ int sh( int argc, char **argv, char **envp )
     /* get command line and process */
     input = fgets(commandline,BUFSIZ,stdin);
     args = stringToArray(input);
-    printf("%s-%s",args[0],args[1]);
+    // printf("%s-%s",args[0],args[1]);
     if(strcmp(args[0],"exit")==0){
       go = 0;
     }
@@ -79,8 +79,9 @@ int sh( int argc, char **argv, char **envp )
       /* else */
         /* fprintf(stderr, "%s: Command not found.\n", args[0]); */
     }
+    freeArgs(args);
   }
-  freeArgs(args);
+  // freeArgs(args);
   free(prompt);
   free(commandline);
   free(pwd);
@@ -152,6 +153,7 @@ void freeArgs(char **array){
     free(array[i]);
     i++;
   }
+  // printf("%d",i);
 }
 
 char **stringToArray(char *input){
