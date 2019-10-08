@@ -41,12 +41,11 @@ int sh( int argc, char **argv, char **envp )
 
   while ( go )
   {
-    char *input;
       /* print your prompt */
     printf("[%s]%s",pwd,prompt);
     /* get command line and process */
-    input = fgets(commandline,BUFSIZ,stdin);
-    args = stringToArray(input);
+    arg = fgets(commandline,BUFSIZ,stdin);
+    args = stringToArray(arg);
     // printf("%s-%s",args[0],args[1]);
     if(strcmp(args[0],"exit")==0){
       go = 0;
@@ -81,6 +80,7 @@ int sh( int argc, char **argv, char **envp )
     }
     freeArgs(args);
   }
+  // free(arg);
   free(args);
   free(prompt);
   free(commandline);
@@ -153,7 +153,6 @@ void freeArgs(char **array){
     free(array[i]);
     i++;
   }
-  // printf("%d",i);
 }
 
 char **stringToArray(char *input){
