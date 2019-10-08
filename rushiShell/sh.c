@@ -81,7 +81,7 @@ int sh( int argc, char **argv, char **envp )
     }
     freeArgs(args);
   }
-  // freeArgs(args);
+  free(args);
   free(prompt);
   free(commandline);
   free(pwd);
