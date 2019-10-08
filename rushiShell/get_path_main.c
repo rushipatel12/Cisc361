@@ -25,14 +25,15 @@ int main()
     p = p->next;
   }
   struct pathelement *tmpFree = p;
-  // struct pathelement *tmpFree2 = NULL;
+  struct pathelement *tmpFree2 = NULL;
   while(tmpFree->next != NULL){
-    // tmpFree2=tmpFree;
-    free(tmpFree->element);
+    tmpFree2=tmpFree;
+    free(tmpFree2->element);
+    free(tmpFree2->next);
+    free(tmpFree2);
     tmpFree = tmpFree->next;
-    // free(tmpFree2->next);
   }
-  free(p);
+  // free(p);
 
   return 0;
 }
