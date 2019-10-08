@@ -41,32 +41,33 @@ int sh( int argc, char **argv, char **envp )
 
   while ( go )
   {
-    char *cmd;
+    char *input;
       /* print your prompt */
     printf("[%s]%s",pwd,prompt);
     /* get command line and process */
-    fgets(commandline,BUFSIZ,stdin);
-    cmd = strtok(commandline, " ");
-    if(strcmp(&cmd[0],"exit")==0){
+    input = fgets(commandline,BUFSIZ,stdin);
+    args = stringToArray(input);
+    printf("%s-%s",args[0],args[1]);
+    if(strcmp(args[0],"exit")==0){
       go = 0;
     }
-    else{
-      // char *ab = get_path(cmd[0]);
-      // if(ab == NULL){
-      //   printf("Command not found: %c\n",cmd[0]);
-      // }
-      // else{
-      //   int pid = fork();
-      //   if(pid == 0){
-      //     exec(ab,cmd);
-      //     printf("exited");
-      //     exit(2);
-      //   }
-      //   else{
-      //     waitpid(pid,NULL,NULL);
-      //   }
-      // }
-    }
+    // else{
+    //   char *ab = get_path(cmd[0]);
+    //   if(ab == NULL){
+    //     printf("Command not found: %c\n",cmd[0]);
+    //   }
+    //   else{
+    //     int pid = fork();
+    //     if(pid == 0){
+    //       exec(ab,cmd);
+    //       printf("exited");
+    //       exit(2);
+    //     }
+    //     else{
+    //       waitpid(pid,NULL,NULL);
+    //     }
+    //   }
+    // }
 
     /* check for each built in command and implement */
 
@@ -93,7 +94,7 @@ char *which(char *command, struct pathelement *pathlist )
 {
    /* loop through pathlist until finding command and return it.  Return
    NULL when not found. */
-
+  printf("enteredFunc");
   struct pathelement *tmp = pathlist;
   while(tmp->next != NULL){
     if(strcmp(tmp->element,command)==0){
@@ -143,4 +144,28 @@ void freeList(struct pathelement *first){
        free(tmp);
     }
 
+}
+
+char **stringToArray(char *input){
+  char buf[BUFSIZ];
+  strcpy(buf,input);
+  char *t = strtok(buf," ");
+  int count=1;
+  while(strtok(NULL," ")){
+    count++;
+  }
+  char **array = malloc((count+1)*sizeof(char*));
+  array[count]= 0;
+
+  count = 0;
+  strcpy(buf,input);
+  t=strtok(buf," ");
+  while(t){
+    int len = strlen(t);
+    array[count] = (char *) malloc((len+1)*sizeof(char));
+    strcpy(array[count],t);
+    count++;
+    t=strtok(NULL," ");
+  }
+  return array;
 }
