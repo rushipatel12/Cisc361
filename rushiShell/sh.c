@@ -54,7 +54,6 @@ int sh( int argc, char **argv, char **envp )
       argsct++;
       i++;
     }
-    printf("%d",argsct);
     // printf("%s-%s",args[0],args[1]);
     if((strcmp(args[0],"exit")==0) && argsct==1){
       go = 0;
@@ -85,6 +84,37 @@ int sh( int argc, char **argv, char **envp )
 
       /* else */
         /* fprintf(stderr, "%s: Command not found.\n", args[0]); */
+    //which
+    if (strcmp(args[0], "which") == 0){
+      if (argsct == 1){
+        fprintf(stderr, "which: Too few arguments.\n");
+      }
+      else{
+        printf("Executing built-in which\n");
+        int i = 1;
+        while (i < argsct && i < MAXARGS){ //execute for all arguments
+          char *cmd = which(args[i], pathlist);
+          printf("%s", cmd);
+          i++;
+          free(cmd);
+        }
+      }
+    } //where
+    else if (strcmp(args[0], "where") == 0){
+      if (argsct == 1){
+        fprintf(stderr, "where: Too few arguments.\n");
+      }
+      else{
+        printf("Executing built-in where\n");
+        int i = 1;
+        while (i < argsct && i < MAXARGS){ //execute for all arguments
+          char *cmd = where(args[i], pathlist);
+          printf("%s", cmd);
+          i++;
+          free(cmd);
+        }
+      }
+    }
     freeArgs(args);
   }
 
@@ -102,38 +132,85 @@ char *which(char *command, struct pathelement *pathlist )
 {
    /* loop through pathlist until finding command and return it.  Return
    NULL when not found. */
-  printf("enteredFunc");
-  struct pathelement *tmp = pathlist;
-  while(tmp->next != NULL){
-    if(strcmp(tmp->element,command)==0){
-      return command;
-    }
-    else{
-      return NULL;
-    }
-  }
-  {
-    /* data */
-  };
-  return NULL;
+  char *cmd = malloc(64);
+  int found = 0; //used to tell whether a path was found or not
 
+  //check to see if built in command
+  if ((strcmp(command, "which") == 0) ||
+      (strcmp(command, "where") == 0) ||
+      (strcmp(command, "cd") == 0) ||
+      (strcmp(command, "pwd") == 0) ||
+      (strcmp(command, "list") == 0) ||
+      (strcmp(command, "pid") == 0) ||
+      (strcmp(command, "kill") == 0) ||
+      (strcmp(command, "prompt") == 0) ||
+      (strcmp(command, "printenv") == 0) ||
+      (strcmp(command, "setenv") == 0)){
+        sprintf(cmd, "%s: shell built-in command.\n", command);
+        return cmd;
+      }
+
+  //else, locate command
+  while (pathlist) {
+    sprintf(cmd, "%s/%s", pathlist->element, command);
+    if (access(cmd, X_OK) == 0) {
+      sprintf(cmd, "%s/%s\n", pathlist->element, command);
+      found = 1;
+      break;
+    }
+    pathlist = pathlist->next;
+  }
+  //check if command not found
+  if (found == 0){
+    sprintf(cmd, "%s: Command not found.\n", command);
+    return cmd;
+  }
+  return cmd;
 } /* which() */
 
 char *where(char *command, struct pathelement *pathlist )
 {
   /* similarly loop through finding all locations of command */
-  struct pathelement *tmp = pathlist;
-  while(tmp->next != NULL){
-    if(strcmp(tmp->element,command)==0){
-      return command;
-    }
-    else{
-      return NULL;
-    }
-  }
+  char *cmd = calloc(64, sizeof(char*));
+  char *test = calloc(256, sizeof(char*));
+  int found = 0; //used to tell whether a path was found or not
+  int built_in = 0; //used to tell whether command is built in or not
 
-  return NULL;
-  
+  //check to see if built in command
+  if ((strcmp(command, "which") == 0) ||
+      (strcmp(command, "where") == 0) ||
+      (strcmp(command, "cd") == 0) ||
+      (strcmp(command, "pwd") == 0) ||
+      (strcmp(command, "list") == 0) ||
+      (strcmp(command, "pid") == 0) ||
+      (strcmp(command, "kill") == 0) ||
+      (strcmp(command, "prompt") == 0) ||
+      (strcmp(command, "printenv") == 0) ||
+      (strcmp(command, "setenv") == 0)){
+        sprintf(cmd, "%s: shell built-in command.\n", command);
+        built_in = 1;
+      }
+
+  //else, locate command
+  while (pathlist) {
+    sprintf(test, "%s/%s", pathlist->element, command);
+    if (access(test, X_OK) == 0){
+      char *toAppend = malloc(64);
+      sprintf(toAppend, "%s%s\n", cmd, test);
+      sprintf(cmd, "%s", toAppend);
+      //sprintf(cmd, "%s%s/%s\n", cmd, pathlist->element, command);
+      found = 1;
+      free(toAppend);
+    }
+    pathlist = pathlist->next;
+  }
+  free(test);
+  if (found == 0 && built_in == 0){
+    sprintf(cmd, "%s: Command not found.\n", command);
+    return cmd;
+  }
+  return cmd;
+
 
 } /* where() */
 
