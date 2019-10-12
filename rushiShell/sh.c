@@ -184,7 +184,7 @@ int sh( int argc, char **argv, char **envp )
       }
     }
         //list
-    else if (strcmp(args[0], "list") == 0){
+    else if (strcmp(args[0], "ls") == 0){
       printf("Executing built-in list\n");
       if (argsct == 1){ //no arguments
         list(pwd);
@@ -260,6 +260,24 @@ int sh( int argc, char **argv, char **envp )
     //     }
     //   }
     // }
+    else{
+      struct pathelement *ab = get_path(args[0]);
+      pid_t pid;
+      if(ab == NULL){
+        printf("Command not found: %s\n",args[0]);
+      }
+      else{
+        pid = fork();
+        if(pid == 0){
+          execve(args[0],&args[0], NULL);
+          printf("exited");
+          exit(pid);
+        }
+        else{
+          waitpid(pid,NULL,0);
+        }
+      }
+    }
     freeArgs(args);
   }
   }
