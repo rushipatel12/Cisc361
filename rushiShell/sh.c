@@ -48,6 +48,8 @@ int sh( int argc, char **argv, char **envp )
     arg = fgets(commandline,BUFSIZ,stdin);
     if (arg == NULL){ //cntrl D
       printf("^D\n");
+      free(pathlist->element);
+      freeList(pathlist);
     }
     else if((strcmp(arg, "\n") == 0)){ //enter key
       free(pathlist->element);
