@@ -281,12 +281,11 @@ int sh( int argc, char **argv, char **envp )
     //   freeList(ab);
     // }
     freeArgs(args);
+    free(args);
     free(pathlist->element);
     freeList(pathlist);
   }
   }
-
-  free(args);
   free(prompt);
   free(commandline);
   free(pwd);
@@ -411,7 +410,7 @@ char **stringToArray(char *input){
     count++;
     t=strtok(NULL," ");
   }
-  free(t);
+  // free(t);
   return array;
 }
 
