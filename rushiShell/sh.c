@@ -289,7 +289,7 @@ int sh( int argc, char **argv, char **envp )
   free(commandline);
   free(pwd);
   free(owd);
-  // free(pathlist->element);
+  free(pathlist->element);
   freeList(pathlist);
   return 0;
 } /* sh() */
