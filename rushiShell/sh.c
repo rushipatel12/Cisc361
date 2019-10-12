@@ -16,7 +16,7 @@ int sh( int argc, char **argv, char **envp )
   char *prompt = calloc(PROMPTMAX, sizeof(char));
   char *commandline = calloc(MAX_CANON, sizeof(char));
   char *command, *commandpath, *arg, *p, *pwd, *owd;
-  char **args = calloc(MAXARGS, sizeof(char*));
+  char **args=NULL;
   int uid, i, status, argsct, go = 1;
   struct passwd *password_entry;
   char *homedir;
@@ -411,7 +411,6 @@ char **stringToArray(char *input){
     count++;
     t=strtok(NULL," ");
   }
-  free(t);
   return array;
 }
 
