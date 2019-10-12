@@ -12,6 +12,7 @@ void freeArgs(char **array);
 char **stringToArray(char *input);
 int cd(char *directory);
 void mykill(int pid, int signal);
+void printPid();
 
 #define PROMPTMAX 32
 #define MAXARGS 10

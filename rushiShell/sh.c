@@ -225,6 +225,14 @@ int sh( int argc, char **argv, char **envp )
         }
       }
     }
+    //pid
+    else if (strcmp(args[0], "pid") == 0){
+      printf("Executing built-in pid\n");
+      if (argsct > 1){
+        fprintf(stderr, "pid: ignoring non-option arguments.\n");
+      }
+      printPid();
+    }
 
 
 
@@ -265,27 +273,27 @@ int sh( int argc, char **argv, char **envp )
     //     }
     //   }
     // }
-    else{
-      struct pathelement *ab = get_path(args[0]);
-      pid_t pid;
-      if(ab == NULL){
-        printf("Command not found: %s\n",args[0]);
-      }
-      else{
-        pid = fork();
-        if(pid == 0){
-          execve(args[0],&args[0], NULL);
-          printf("exited");
-          exit(pid);
-        }
-        else{
-          waitpid(pid,NULL,0);
-        }
-      }
-      mykill(pid, 15);
-      free(ab->element);
-      freeList(ab);
-    }
+    // else{
+    //   struct pathelement *ab = get_path(args[0]);
+    //   pid_t pid;
+    //   if(ab == NULL){
+    //     printf("Command not found: %s\n",args[0]);
+    //   }
+    //   else{
+    //     pid = fork();
+    //     if(pid == 0){
+    //       execve(args[0],&args[0], NULL);
+    //       printf("exited");
+    //       exit(pid);
+    //     }
+    //     else{
+    //       waitpid(pid,NULL,0);
+    //     }
+    //   }
+    //   mykill(pid, 15);
+    //   free(ab->element);
+    //   freeList(ab);
+    // }
     freeArgs(args);
     free(args);
     free(pathlist->element);
@@ -448,4 +456,7 @@ int cd(char *directory){ //return an int to tell if chdir worked
 
 void mykill(int pid, int signal){ //kills pid with signal
   kill(pid, signal);
+}
+void printPid(){ //prints out current process pid
+  printf("%d\n", getpid());
 }
