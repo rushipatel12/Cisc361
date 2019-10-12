@@ -411,6 +411,7 @@ char **stringToArray(char *input){
     count++;
     t=strtok(NULL," ");
   }
+  free(t);
   return array;
 }
 
