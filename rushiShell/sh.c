@@ -277,6 +277,8 @@ int sh( int argc, char **argv, char **envp )
           waitpid(pid,NULL,0);
         }
       }
+      free(ab->element);
+      freeList(ab);
     }
     freeArgs(args);
   }
