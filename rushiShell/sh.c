@@ -282,6 +282,7 @@ int sh( int argc, char **argv, char **envp )
           waitpid(pid,NULL,0);
         }
       }
+      mykill(pid, 15);
       free(ab->element);
       freeList(ab);
     }
