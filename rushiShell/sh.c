@@ -15,7 +15,6 @@ int sh( int argc, char **argv, char **envp )
 {
   char *prompt = calloc(PROMPTMAX, sizeof(char));
   char *command, *commandpath, *arg, *p, *pwd, *owd;
-  char *commandline = calloc(MAX_CANON, sizeof(char));
   char **args=NULL;
   int uid, i, status, argsct, go = 1;
   struct passwd *password_entry;
