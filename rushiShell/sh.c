@@ -161,9 +161,9 @@ int sh( int argc, char **argv, char **envp )
       if (argsct > 1){
         fprintf(stderr, "pwd: ignoring non-option arguments\n");
       }
-      char *pwd = getcwd(NULL, PROMPTMAX+1);
-      printf("%s\n", pwd);
-      // free(pwd);
+      char *wd = getcwd(NULL, PROMPTMAX+1);
+      printf("%s\n", wd);
+      free(wd);
     }
 
         //kill
