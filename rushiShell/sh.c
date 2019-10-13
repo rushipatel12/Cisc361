@@ -163,7 +163,7 @@ int sh( int argc, char **argv, char **envp )
       }
       char *pwd = getcwd(NULL, PROMPTMAX+1);
       printf("%s\n", pwd);
-      free(pwd);
+      // free(pwd);
     }
 
         //kill
