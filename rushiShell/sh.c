@@ -56,6 +56,7 @@ int sh( int argc, char **argv, char **envp )
     else if((strcmp(arg, "\n") == 0)){ //enter key
       free(pathlist->element);
       freeList(pathlist);
+      free(arg);
       continue;
     }
     else{
