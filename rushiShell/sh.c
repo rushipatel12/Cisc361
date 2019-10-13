@@ -236,43 +236,46 @@ int sh( int argc, char **argv, char **envp )
 
 
 
-    // //printenv
-    // else if(strcmp(args[0], "printenv") == 0){
-    //   if (argsct > 2){
-    //     fprintf(stderr, "printenv: Too many arguments.\n");
-    //   }
-    //   else if (argsct == 1) { //print entire environment
-    //       printenv(environ, NULL);
-    //     }
-    //   else {  // print one ENV variable
-    //     printenv(environ, args[1]);
-    //   }
-    //  }
+    //printenv
+      else if (strcmp(args[0], "printenv") == 0)
+      {
+        printenv(argsct, envp, args);
+      }
 
-    //   //setenv
-    // else if(strcmp(args[0], "setenv") == 0){
-    //   if (argsct > 3){
-    //     fprintf(stderr, "setenv: Too many arguments.\n");
-    //   }
-    //   else{
-    //     printf("Executing buit-in setenv.\n");
-    //     if (argsct == 1){
-    //       printenv(environ, NULL);
-    //     }
-    //     else if(argsct == 2){ //set args[1] to environment variable as " "
-    //       setenv(args[1], " ", 1);
-    //       if (strcmp(args[1], "HOME") == 0){ //change homedir
-    //         homedir = " ";
-    //       }
-    //     }
-    //     else if (argsct == 3){ //set environment variable args[1] to args[2]
-    //       setenv(args[1], args[2], 1);
-    //       if (strcmp(args[1], "HOME") == 0){ //change homedir
-    //         homedir = args[2];
-    //       }
-    //     }
-    //   }
-    // }
+      //setenv
+      else if (strcmp(args[0], "setenv") == 0)
+      {
+        //Print env if zero args
+        if (argsct == 1)
+        {
+          printenv(argsct, envp, args);
+        }
+        else if (argsct == 2)
+        {
+          //Set to empty
+          setenv(args[1], "", 1);
+        }
+        else if (argsct == 3)
+        {
+          //Reset vars
+          setenv(args[1], args[2], 1);
+
+          //special care for home and path
+          if (strcmp(args[1], "HOME") == 0)
+          {
+            homedir = getenv("HOME");
+          }
+          else if (strcmp(args[1], "PATH") == 0)
+          {
+            pathlist = get_path();
+          }
+        }
+        else
+        {
+          printf("%s\n", "setenv: Incorrect amount of arguments");
+        }
+        break;
+      }
     // else{
     //   struct pathelement *ab = get_path(args[0]);
     //   pid_t pid;
@@ -460,4 +463,24 @@ void mykill(int pid, int signal){ //kills pid with signal
 }
 void printPid(){ //prints out current process pid
   printf("%d\n", getpid());
+}
+
+void printenv(int num_args, char **envp, char **args){
+  if (num_args == 1)
+  {
+    int i = 0;
+    while (envp[i] != NULL)
+    {
+      printf("%s\n", envp[i]);
+      i++;
+    }
+  }
+  else if (num_args == 2)
+  {
+    char *env_str = getenv(args[1]);
+    if (env_str != NULL)
+    {
+      printf("%s\n", env_str);
+    }
+  }
 }
