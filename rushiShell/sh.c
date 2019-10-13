@@ -161,7 +161,7 @@ int sh( int argc, char **argv, char **envp )
       if (argsct > 1){
         fprintf(stderr, "pwd: ignoring non-option arguments\n");
       }
-      char *wd = getcwd(NULL, PROMPTMAX+1);
+      char *wd = getcwd(NULL, PATH_MAX+1);
       printf("%s\n", wd);
       free(wd);
     }
@@ -313,6 +313,7 @@ char *which(char *command, struct pathelement *pathlist )
    NULL when not found. */
   char *cmd = malloc(64);
   int found = 0; //used to tell whether a path was found or not
+
 
   //else, locate command
   while (pathlist) {
