@@ -14,8 +14,7 @@
 int sh( int argc, char **argv, char **envp )
 {
   char *prompt = calloc(PROMPTMAX, sizeof(char));
-  char *commandline = calloc(MAX_CANON, sizeof(char));
-  char *command, *commandpath, *arg, *p, *pwd, *owd;
+  char *command, *commandpath, *p, *pwd, *owd;
   char **args=NULL;
   int uid, i, status, argsct, go = 1;
   struct passwd *password_entry;
@@ -45,14 +44,15 @@ int sh( int argc, char **argv, char **envp )
       /* print your prompt */
     printf("[%s]%s",pwd,prompt);
     /* get command line and process */
-    arg = fgets(commandline,BUFSIZ,stdin);
+    // char *arg;
+    char *arg = calloc(MAX_CANON, sizeof(char));
+    arg = fgets(arg,BUFSIZ,stdin);
     if (arg == NULL){ //cntrl D
       printf("^D\n");
       free(pathlist->element);
       freeList(pathlist);
-      printf("[%s]%s",pwd,prompt);
-      arg = fgets(commandline,BUFSIZ,stdin);
-      continue;
+      free(arg);
+      // continue;
     }
     else if((strcmp(arg, "\n") == 0)){ //enter key
       free(pathlist->element);
@@ -299,9 +299,9 @@ int sh( int argc, char **argv, char **envp )
     free(pathlist->element);
     freeList(pathlist);
   }
+  free(arg);
   }
   free(prompt);
-  free(commandline);
   free(pwd);
   free(owd);
   return 0;
