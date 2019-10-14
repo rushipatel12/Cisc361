@@ -268,27 +268,27 @@ int sh( int argc, char **argv, char **envp )
         }
       }
     }
-    // else{
-    //   struct pathelement *ab = get_path(args[0]);
-    //   pid_t pid;
-    //   if(ab == NULL){
-    //     printf("Command not found: %s\n",args[0]);
-    //   }
-    //   else{
-    //     pid = fork();
-    //     if(pid == 0){
-    //       execve(args[0],&args[0], NULL);
-    //       printf("exited");
-    //       exit(pid);
-    //     }
-    //     else{
-    //       waitpid(pid,NULL,0);
-    //     }
-    //   }
-    //   mykill(pid, 15);
-    //   free(ab->element);
-    //   freeList(ab);
-    // }
+    else{
+      struct pathelement *ab = get_path(args[0]);
+      pid_t pid;
+      if(ab == NULL){
+        printf("Command not found: %s\n",args[0]);
+      }
+      else{
+        pid = fork();
+        if(pid == 0){
+          execve(args[0],&args[0], NULL);
+          printf("exited");
+          exit(pid);
+        }
+        else{
+          waitpid(pid,NULL,0);
+        }
+      }
+      // mykill(pid, 15);
+      free(ab->element);
+      freeList(ab);
+    }
     freeArgs(args);
     free(args);
     free(pathlist->element);
