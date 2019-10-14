@@ -275,6 +275,16 @@ int sh( int argc, char **argv, char **envp )
       if(pid == 0){
         execve(args[0],&args[0], NULL);
         printf("exited");
+        free(ab->element);
+        freeList(ab);
+        freeArgs(args);
+        free(args);
+        free(pathlist->element);
+        freeList(pathlist);
+        free(arg);
+        free(prompt);
+        free(pwd);
+        free(owd);
         exit(pid);
       }
       else if(pid != 0){
