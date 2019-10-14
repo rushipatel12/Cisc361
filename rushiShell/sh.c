@@ -11,6 +11,8 @@
 #include <signal.h>
 #include "sh.h"
 
+extern char **environ;
+
 int sh( int argc, char **argv, char **envp )
 {
   char *prompt = calloc(PROMPTMAX, sizeof(char));
@@ -243,39 +245,29 @@ int sh( int argc, char **argv, char **envp )
       }
 
       //setenv
-      else if (strcmp(args[0], "setenv") == 0)
-      {
-        //Print env if zero args
-        if (argsct == 1)
-        {
-          printenv(argsct, envp, args);
-        }
-        else if (argsct == 2)
-        {
-          //Set to empty
-          setenv(args[1], "", 1);
-        }
-        else if (argsct == 3)
-        {
-          //Reset vars
-          setenv(args[1], args[2], 1);
-
-          //special care for home and path
-          if (strcmp(args[1], "HOME") == 0)
-          {
-            homedir = getenv("HOME");
-          }
-          else if (strcmp(args[1], "PATH") == 0)
-          {
-            pathlist = get_path();
-          }
-        }
-        else
-        {
-          printf("%s\n", "setenv: Incorrect amount of arguments");
-        }
-        break;
+    else if(strcmp(args[0], "setenv") == 0){
+      if (argsct > 3){
+        fprintf(stderr, "setenv: Too many arguments.\n");
       }
+      else{
+        printf("Executing buit-in setenv.\n");
+        if (argsct == 1){
+          printenv(argsct, environ, args);
+        }
+        else if(argsct == 2){ //set args[1] to environment variable as " "
+          setenv(args[1], " ", 1);
+          if (strcmp(args[1], "HOME") == 0){ //change homedir
+            homedir = " ";
+          }
+        }
+        else if (argsct == 3){ //set environment variable args[1] to args[2]
+          setenv(args[1], args[2], 1);
+          if (strcmp(args[1], "HOME") == 0){ //change homedir
+            homedir = args[2];
+          }
+        }
+      }
+    }
     // else{
     //   struct pathelement *ab = get_path(args[0]);
     //   pid_t pid;
