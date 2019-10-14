@@ -188,6 +188,14 @@ int sh( int argc, char **argv, char **envp )
           signal = signal * -1;
           mykill(pid, signal);
         }
+        freeArgs(args);
+        free(args);
+        free(pathlist->element);
+        freeList(pathlist);
+        free(arg);
+        free(prompt);
+        free(pwd);
+        free(owd);
       }
     }
         //list
