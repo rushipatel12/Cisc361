@@ -103,7 +103,7 @@ int sh( int argc, char **argv, char **envp )
       /* else */
         /* fprintf(stderr, "%s: Command not found.\n", args[0]); */
     //which
-    if (strcmp(args[0], "which") == 0){
+    else if (strcmp(args[0], "which") == 0){
       if (argsct == 1){
         fprintf(stderr, "which: Too few arguments.\n");
       }
@@ -239,7 +239,7 @@ int sh( int argc, char **argv, char **envp )
 
 
     //printenv
-      else if (strcmp(args[0], "printenv") == 0)
+    else if (strcmp(args[0], "printenv") == 0)
       {
         printenv(argsct, envp, args);
       }
@@ -270,20 +270,19 @@ int sh( int argc, char **argv, char **envp )
     }
     else{
       struct pathelement *ab = get_path(args[0]);
-      pid_t pid;
-      if(ab == NULL){
-        printf("Command not found: %s\n",args[0]);
+      int pid;
+      pid = fork();
+      if(pid == 0){
+        execve(args[0],&args[0], NULL);
+        printf("exited");
+        exit(pid);
+      }
+      else if(pid != 0){
+        waitpid(pid,NULL,0);
       }
       else{
-        pid = fork();
-        if(pid == 0){
-          execve(args[0],&args[0], NULL);
-          printf("exited");
-          exit(pid);
-        }
-        else{
-          waitpid(pid,NULL,0);
-        }
+        printf("Command not found: %s\n",args[0]);
+
       }
       // mykill(pid, 15);
       free(ab->element);
