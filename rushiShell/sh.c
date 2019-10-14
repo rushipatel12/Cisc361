@@ -180,7 +180,7 @@ int sh( int argc, char **argv, char **envp )
         printf("Executing built-in kill\n");
         if (argsct == 2){ //no specified signal
           int pid = atoi(args[1]);
-          mykill(pid,SIGKILL);
+          mykill(pid,SIGTERM);
         }
         else{
           int pid = atoi(args[2]);
