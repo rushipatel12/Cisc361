@@ -272,36 +272,36 @@ int sh( int argc, char **argv, char **envp )
           }
         }
       }
-      // else{
-      //   struct pathelement *ab = get_path(args[0]);
-      //   int pid;
-      //   pid = fork();
-      //   if(pid == 0){
-      //     execve(args[0],&args[0], NULL);
-      //     printf("exited");
-      //     free(ab->element);
-      //     freeList(ab);
-      //     freeArgs(args);
-      //     free(args);
-      //     free(pathlist->element);
-      //     freeList(pathlist);
-      //     free(arg);
-      //     free(prompt);
-      //     free(pwd);
-      //     free(owd);
-      //     exit(pid);
-      //   }
-      //   else if(pid != 0){
-      //     waitpid(pid,NULL,0);
-      //   }
-      //   else{
-      //     printf("Command not found: %s\n",args[0]);
+      else{
+        struct pathelement *ab = get_path(args[0]);
+        int pid;
+        pid = fork();
+        if(pid == 0){
+          execve(args[0],&args[0], NULL);
+          printf("exited");
+          free(ab->element);
+          freeList(ab);
+          freeArgs(args);
+          free(args);
+          free(pathlist->element);
+          freeList(pathlist);
+          free(arg);
+          free(prompt);
+          free(pwd);
+          free(owd);
+          exit(pid);
+        }
+        else if(pid != 0){
+          waitpid(pid,NULL,0);
+        }
+        else{
+          printf("Command not found: %s\n",args[0]);
 
-      //   }
-      //   // mykill(pid, 15);
-      //   free(ab->element);
-      //   freeList(ab);
-      // }
+        }
+        // mykill(pid, 15);
+        free(ab->element);
+        freeList(ab);
+      }
       freeArgs(args);
       free(args);
       free(pathlist->element);
