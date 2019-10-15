@@ -198,14 +198,14 @@ int sh( int argc, char **argv, char **envp )
             int pid = atoi(args[2]);
             int signal = atoi(args[1]);
             signal = signal * -1;
-            freeArgs(args);
-            free(args);
-            free(pathlist->element);
-            freeList(pathlist);
-            free(arg);
-            free(prompt);
-            free(pwd);
-            free(owd);
+            // freeArgs(args);
+            // free(args);
+            // free(pathlist->element);
+            // freeList(pathlist);
+            // free(arg);
+            // free(prompt);
+            // free(pwd);
+            // free(owd);
             mykill(pid, signal);
           }
         }
