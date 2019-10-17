@@ -61,6 +61,8 @@ int sh( int argc, char **argv, char **envp ){
       args = stringToArray(arg);
       i=0;
       argsct=0;
+      char *tmp;
+      tmp = &args[0][0];
       while(args[i]!=NULL){
         argsct++;
         i++;
@@ -103,7 +105,7 @@ int sh( int argc, char **argv, char **envp ){
         }
       }
       //list
-      else if (strcmp(args[0], "ls") == 0){
+      else if (strcmp(args[0], "ls") == 0 || strcmp(args[0], "list") == 0){
         printf("Executing built-in list\n");
         if (argsct == 1){ //no arguments
           ls(pwd);
@@ -246,11 +248,22 @@ int sh( int argc, char **argv, char **envp ){
       }
 
       //running programs and not built in commands
-      else if(strcmp(&args[0][0],".")==0){
+      else{
         struct pathelement *ab = get_path(args[0]);
         int pid;
         pid = fork();
         if(pid == 0){
+          char *cmd_path;
+
+          if(args[0][0] == '.' || args[0][0] == '/'){
+            cmd_path = (char *) malloc(strlen(args[0]));
+            strcpy(cmd_path,args[0]);
+          }
+          else{
+            cmd_path = which(args[0],pathlist);
+          }
+
+          int access_result = access(cmd_path, F_OK | X_OK);
           execve(args[0],&args[0], NULL);
           printf("exited");
           free(ab->element);
@@ -327,6 +340,7 @@ char *where(char *command, struct pathelement *pathlist ){
       (strcmp(command, "cd") == 0) ||
       (strcmp(command, "pwd") == 0) ||
       (strcmp(command, "ls") == 0) ||
+      (strcmp(command, "list") == 0) ||
       (strcmp(command, "pid") == 0) ||
       (strcmp(command, "kill") == 0) ||
       (strcmp(command, "prompt") == 0) ||
