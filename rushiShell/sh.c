@@ -151,31 +151,6 @@ int sh( int argc, char **argv, char **envp ){
         }
       }
 
-      //cd
-      else if (strcmp(args[0], "cd") == 0){
-        if (argsct > 2){
-          fprintf(stderr, "cd: Too many arguments.\n");
-        }
-        else{
-          int success = 0;
-          printf("Executing built-in cd\n");
-          if (argsct == 1){ //no arguments
-            success = cd(homedir);
-          }
-          else if (strcmp(args[1], "-") == 0){ //go to previous directory
-            success = cd(owd);
-          }
-          else{
-            success = cd(args[1]);
-          }
-          if (success){ //change owd and cwd if cd worked
-            free(owd);
-            owd = pwd;
-            pwd = getcwd(NULL, PATH_MAX+1);
-          }
-        }
-      }
-
       //setenv
       else if(strcmp(args[0], "setenv") == 0){
         if (argsct > 3){
@@ -197,6 +172,31 @@ int sh( int argc, char **argv, char **envp ){
             if (strcmp(args[1], "HOME") == 0){ //change homedir
               homedir = args[2];
             }
+          }
+        }
+      }
+
+      //cd
+      else if (strcmp(args[0], "cd") == 0){
+        if (argsct > 2){
+          fprintf(stderr, "cd: Too many arguments.\n");
+        }
+        else{
+          int success = 0;
+          printf("Executing built-in cd\n");
+          if (argsct == 1){ //no arguments
+            success = cd(homedir);
+          }
+          else if (strcmp(args[1], "-") == 0){ //go to previous directory
+            success = cd(owd);
+          }
+          else{
+            success = cd(args[1]);
+          }
+          if (success){ //change owd and cwd if cd worked
+            free(owd);
+            owd = pwd;
+            pwd = getcwd(NULL, PATH_MAX+1);
           }
         }
       }
