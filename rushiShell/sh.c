@@ -276,7 +276,9 @@ int sh( int argc, char **argv, char **envp ){
           free(prompt);
           free(pwd);
           free(owd);
+          free(cmd_path);
           exit(pid);
+          
         }
         else if(pid != 0){
           waitpid(pid,NULL,0);
