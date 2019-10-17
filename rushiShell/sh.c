@@ -194,7 +194,7 @@ int sh( int argc, char **argv, char **envp ){
             success = cd(args[1]);
           }
           if (success){ //change owd and cwd if cd worked
-            free(owd);
+            // free(owd);
             owd = pwd;
             pwd = getcwd(NULL, PATH_MAX+1);
           }
