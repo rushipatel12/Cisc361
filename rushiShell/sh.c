@@ -169,8 +169,11 @@ int sh( int argc, char **argv, char **envp ){
           }
           else if (argsct == 3){ //set environment variable args[1] to args[2]
             setenv(args[1], args[2], 1);
-            if (strcmp(args[1], "HOME") == 0){ //change homedir
-              homedir = args[2];
+            if (strcmp(args[1], "HOME") == 0) {
+                    homedir = getenv("HOME");
+            } 
+            else if (strcmp(args[1], "PATH") == 0) {
+                pathlist = get_path();
             }
           }
         }
