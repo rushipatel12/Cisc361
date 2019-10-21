@@ -133,14 +133,14 @@ int sh( int argc, char **argv, char **envp ){
           printf("Executing built-in kill\n");
           if (argsct == 2){ //no specified signal
             int pid = atoi(args[1]);
-            arrayFree(args);
-            free(args);
-            free(pathlist->element);
-            listFree(pathlist);
-            free(arg);
-            free(prompt);
-            free(pwd);
-            free(owd);
+            // arrayFree(args);
+            // free(args);
+            // free(pathlist->element);
+            // listFree(pathlist);
+            // free(arg);
+            // free(prompt);
+            // free(pwd);
+            // free(owd);
             kill(pid,SIGTERM);
           }
           else{
