@@ -47,6 +47,8 @@ int sh( int argc, char **argv, char **envp ){
     char *arg = calloc(MAX_CANON, sizeof(char));
     if (fgets(arg,BUFSIZ,stdin) == NULL){ //cntrl D
       printf("^D\n");
+      free(pathlist->element);
+      listFree(pathlist);
     }
     else if((strcmp(arg, "\n") == 0)){ //enter key
       free(pathlist->element);
