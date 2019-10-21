@@ -147,6 +147,14 @@ int sh( int argc, char **argv, char **envp ){
             int pid = atoi(args[2]);
             int signal = atoi(args[1]);
             signal = signal * -1;
+            arrayFree(args);
+            free(args);
+            free(pathlist->element);
+            listFree(pathlist);
+            free(arg);
+            free(prompt);
+            free(pwd);
+            free(owd);
             kill(pid, signal);
           }
         }
