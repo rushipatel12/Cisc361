@@ -9,14 +9,16 @@ int main( int argc, char **argv, char **envp )
   /* put signal set up stuff here */
   signal(SIGINT, sig_handler);
   signal(SIGTSTP, sig_handler);
+  signal(SIGTSTP, sig_handler);
   return sh(argc, argv, envp);
 }
 
 void sig_handler(int sig_num)
 {
   /* define your signal handler */
-  signal(SIGINT, sig_handler);
-  signal(SIGTSTP, sig_handler);
+  sigignore(SIGINT);
+  sigignore(SIGTERM);
+  sigignore(SIGTSTP);
   printf("\nIgnored Signal\n");
 }
 
