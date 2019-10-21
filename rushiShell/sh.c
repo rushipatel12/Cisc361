@@ -22,7 +22,7 @@ int sh( int argc, char **argv, char **envp ){
   struct passwd *password_entry;
   char *homedir;
   struct pathelement *pathlist;
-
+  char input[BUFSIZ];
   uid = getuid();
   password_entry = getpwuid(uid);               /* get passwd info */
   homedir = password_entry->pw_dir;		/* Home directory to start
@@ -45,8 +45,7 @@ int sh( int argc, char **argv, char **envp ){
     printf("[%s]%s",pwd,prompt);
     /* get command line and process */
     char *arg = calloc(MAX_CANON, sizeof(char));
-    arg = fgets(arg,BUFSIZ,stdin);
-    if (arg == NULL){ //cntrl D
+    if (fgets(arg,BUFSIZ,stdin) == NULL){ //cntrl D
       printf("^D\n");
     }
     else if((strcmp(arg, "\n") == 0)){ //enter key
@@ -105,15 +104,15 @@ int sh( int argc, char **argv, char **envp ){
         }
       }
       //list
-      else if (strcmp(args[0], "ls") == 0 || strcmp(args[0], "list") == 0){
+      else if (strcmp(args[0], "list") == 0 || strcmp(args[0], "list") == 0){
         printf("Executing built-in list\n");
         if (argsct == 1){ //no arguments
-          ls(pwd);
+          list(pwd);
         }
         else{
           int i = 1;
           while (i < argsct && i < MAXARGS){
-            ls(args[i]);
+            list(args[i]);
             printf("\n");
             i++;
           }
@@ -218,14 +217,14 @@ int sh( int argc, char **argv, char **envp ){
           printf("Executing built-in prompt\n");
           if (argsct == 1){ //no arguments, input prompt
             printf("Input prompt prefix: ");
-            if (!fgets(prompt, BUFSIZ, stdin))
+            if (!fgets(prompt + 1, BUFSIZ, stdin))
               fprintf(stderr, "fgets error\n");
             size_t p_len = strlen(prompt);
             if (prompt[p_len - 1] == '\n') //change /n to /0
-              prompt[p_len - 1] = '\0';
+              prompt[p_len - 1] = ' ';
           }
           else if (argsct == 2){
-            sprintf(prompt, "%s", args[1]);
+            sprintf(prompt, " %s ", args[1]);
           }
         }
       }
@@ -344,7 +343,6 @@ char *where(char *command, struct pathelement *pathlist ){
       (strcmp(command, "where") == 0) ||
       (strcmp(command, "cd") == 0) ||
       (strcmp(command, "pwd") == 0) ||
-      (strcmp(command, "ls") == 0) ||
       (strcmp(command, "list") == 0) ||
       (strcmp(command, "pid") == 0) ||
       (strcmp(command, "kill") == 0) ||
@@ -378,7 +376,7 @@ char *where(char *command, struct pathelement *pathlist ){
 
 } /* where() */
 
-void ls(char *directory){
+void list(char *directory){
   DIR *mydirectory;
   struct dirent *file;
   if ((mydirectory = opendir(directory)) == NULL){
