@@ -283,7 +283,7 @@ int sh( int argc, char **argv, char **envp ){
               free(cmd_path);
               free(pwd);
               free(owd);
-              exit(pid);
+              // exit(pid);
             }
             else if(pid != 0){
               waitpid(pid,NULL,0);
@@ -308,9 +308,10 @@ int sh( int argc, char **argv, char **envp ){
                 listFree(pathlist);
                 free(arg);
                 free(prompt);
+                free(cmd_path);
                 free(pwd);
                 free(owd);
-                exit(pid);
+                // exit(pid);
               }
               else if(pid != 0){
                 waitpid(pid,NULL,0);
