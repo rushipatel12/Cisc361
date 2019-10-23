@@ -280,6 +280,7 @@ int sh( int argc, char **argv, char **envp ){
               listFree(pathlist);
               free(arg);
               free(prompt);
+              free(cmd_path);
               free(pwd);
               free(owd);
               exit(pid);
