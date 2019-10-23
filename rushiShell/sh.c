@@ -291,7 +291,7 @@ int sh( int argc, char **argv, char **envp ){
             else{
               printf("Command not found: %s\n",args[0]);
             }
-            free(cmd_path);
+            // free(cmd_path);
           }
           else{
             cmd_path = which(args[0],pathlist);
@@ -319,7 +319,7 @@ int sh( int argc, char **argv, char **envp ){
               else{
                 printf("Command not found: %s\n",args[0]);
               }
-              free(cmd_path);
+              // free(cmd_path);
 
             }
           }
