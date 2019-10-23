@@ -262,46 +262,84 @@ int sh( int argc, char **argv, char **envp ){
 
       //running programs and not built in commands
       else{
-        struct pathelement *ab = get_path(args[0]);
-        int pid;
-        pid = fork();
-        if(pid == 0){
+        // int pid;
+        // pid = fork();
+        // if(pid == 0){
           char *cmd_path;
-
-          if(args[0][0] == '.' || args[0][0] == '/'){
+          if(strchr(arg,'.') != NULL || strchr(arg,'/') != NULL){
             cmd_path = (char *) malloc((strlen(args[0])+1)*sizeof(char));
             strcpy(cmd_path,args[0]);
+            pid_t pid;
+            pid = fork();
+            if(pid == 0){
+              execve(args[0],&args[0], NULL);
+              printf("exited\n");
+              arrayFree(args);
+              free(args);
+              free(pathlist->element);
+              listFree(pathlist);
+              free(arg);
+              free(prompt);
+              free(pwd);
+              free(owd);
+              free(cmd_path);
+              exit(pid);
+            }
+            else if(pid != 0){
+              waitpid(pid,NULL,0);
+            }
+            else{
+              printf("Command not found: %s\n",args[0]);
+            }
           }
           else{
             cmd_path = which(args[0],pathlist);
+            cmd_path[strlen(cmd_path)-1] = '\0';
+            if(access(cmd_path,X_OK) == 0){
+              pid_t pid;
+              pid = fork();
+              if(pid == 0){
+                execve(cmd_path,args, envp);
+                printf("exited\n");
+                arrayFree(args);
+                free(args);
+                free(pathlist->element);
+                listFree(pathlist);
+                free(arg);
+                free(prompt);
+                free(pwd);
+                free(owd);
+                free(cmd_path);
+                exit(pid);
+              }
+              else if(pid != 0){
+                waitpid(pid,NULL,0);
+              }
+              else{
+                printf("Command not found: %s\n",args[0]);
+              }
+            }
           }
-
-          int access_result = access(cmd_path, F_OK | X_OK);
-          execve(args[0],&args[0], NULL);
-          printf("exited");
-          free(ab->element);
-          listFree(ab);
-          arrayFree(args);
-          free(args);
-          free(pathlist->element);
-          listFree(pathlist);
-          free(arg);
-          free(prompt);
-          free(pwd);
-          free(owd);
-          free(cmd_path);
-          exit(pid);
+          // printf("exited\n");
+          // arrayFree(args);
+          // free(args);
+          // free(pathlist->element);
+          // listFree(pathlist);
+          // free(arg);
+          // free(prompt);
+          // free(pwd);
+          // free(owd);
+          // free(cmd_path);
+          // exit(pid);
           
-        }
-        else if(pid != 0){
-          waitpid(pid,NULL,0);
-        }
-        else{
-          printf("Command not found: %s\n",args[0]);
+        // }
+        // else if(pid != 0){
+        //   waitpid(pid,NULL,0);
+        // }
+        // else{
+        //   printf("Command not found: %s\n",args[0]);
 
-        }
-        free(ab->element);
-        listFree(ab);
+        // }
       }
       arrayFree(args);
       free(args);
