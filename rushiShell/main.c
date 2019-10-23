@@ -19,6 +19,5 @@ void sig_handler(int sig_num)
   signal(SIGINT, sig_handler);
   signal(SIGTSTP, sig_handler);
   signal(SIGTERM, sig_handler);
-  printf("\nIgnored Signal\n");
 }
 
