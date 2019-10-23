@@ -11,22 +11,21 @@
 #include <signal.h>
 #include "sh.h"
 #include <glob.h>
+#include <wordexp.h>
 
 extern char **environ;
 
 int sh( int argc, char **argv, char **envp ){
   char *prompt = calloc(PROMPTMAX, sizeof(char));
   char *command, *commandpath, *p, *pwd, *owd;
-  char **args=NULL;
+  char **args = NULL;
   int uid, i, status, argsct, go = 1;
   struct passwd *password_entry;
   char *homedir;
   struct pathelement *pathlist;
-  char input[BUFSIZ];
   uid = getuid();
-  password_entry = getpwuid(uid);               /* get passwd info */
-  homedir = password_entry->pw_dir;		/* Home directory to start
-						  out with*/
+  password_entry = getpwuid(uid); /* get passwd info */
+  homedir = password_entry->pw_dir; /* Home directory to start out with*/
      
   if ((pwd = getcwd(NULL, PATH_MAX+1)) == NULL ){
     perror("getcwd");
@@ -37,26 +36,23 @@ int sh( int argc, char **argv, char **envp ){
   prompt[0] = ' '; prompt[1] = '\0';
 
   /* Put PATH into a linked list */
-  // pathlist = get_path();
 
   while (go){
     pathlist = get_path();
-    /* print your prompt */
     printf("[%s]%s",pwd,prompt);
-    /* get command line and process */
     char *arg = calloc(MAX_CANON, sizeof(char));
-    if (fgets(arg,BUFSIZ,stdin) == NULL){ //cntrl D
+    if (fgets(arg,BUFSIZ,stdin) == NULL){ //Control D command
       printf("^D\n");
       free(pathlist->element);
       listFree(pathlist);
     }
-    else if((strcmp(arg, "\n") == 0)){ //enter key
+    else if((strcmp(arg, "\n") == 0)){ //Enter Key command
       free(pathlist->element);
       listFree(pathlist);
       free(arg);
       continue;
     }
-    else{
+    else{ //Only does splits input into array and goes through commands if input is a command
       int argLen = strlen(arg);
       arg[argLen-1]=0;
       args = stringToArray(arg);
@@ -72,7 +68,7 @@ int sh( int argc, char **argv, char **envp ){
         go = 0;
       }
 
-      //which
+      //which command
       else if (strcmp(args[0], "which") == 0){
         if (argsct == 1){
           fprintf(stderr, "which: Too few arguments.\n");
@@ -80,7 +76,7 @@ int sh( int argc, char **argv, char **envp ){
         else{
           printf("Executing built-in which\n");
           int i = 1;
-          while (i < argsct && i < MAXARGS){ //execute for all arguments
+          while (i < argsct && i < MAXARGS){
             char *cmd = which(args[i], pathlist);
             printf("%s", cmd);
             i++;
@@ -89,7 +85,7 @@ int sh( int argc, char **argv, char **envp ){
         }
       } 
       
-      //where
+      //where command
       else if (strcmp(args[0], "where") == 0){
         if (argsct == 1){
           fprintf(stderr, "where: Too few arguments.\n");
@@ -97,7 +93,7 @@ int sh( int argc, char **argv, char **envp ){
         else{
           printf("Executing built-in where\n");
           int i = 1;
-          while (i < argsct && i < MAXARGS){ //execute for all arguments
+          while (i < argsct && i < MAXARGS){ 
             char *cmd = where(args[i], pathlist);
             printf("%s", cmd);
             i++;
@@ -105,10 +101,10 @@ int sh( int argc, char **argv, char **envp ){
           }
         }
       }
-      //list
+      //list command
       else if (strcmp(args[0], "list") == 0 || strcmp(args[0], "list") == 0){
         printf("Executing built-in list\n");
-        if (argsct == 1){ //no arguments
+        if (argsct == 1){ 
           list(pwd);
         }
         else{
@@ -121,7 +117,7 @@ int sh( int argc, char **argv, char **envp ){
         }
       }
 
-      //kill
+      //kill command
       else if (strcmp(args[0], "kill") == 0){
         if (argsct > 3){
           fprintf(stderr, "kill: Too many arguments.\n");
@@ -131,16 +127,8 @@ int sh( int argc, char **argv, char **envp ){
         }
         else{
           printf("Executing built-in kill\n");
-          if (argsct == 2){ //no specified signal
+          if (argsct == 2){
             int pid = atoi(args[1]);
-            // arrayFree(args);
-            // free(args);
-            // free(pathlist->element);
-            // listFree(pathlist);
-            // free(arg);
-            // free(prompt);
-            // free(pwd);
-            // free(owd);
             kill(pid,SIGTERM);
           }
           else{
@@ -160,7 +148,7 @@ int sh( int argc, char **argv, char **envp ){
         }
       }
 
-      //setenv
+      //setenv command
       else if(strcmp(args[0], "setenv") == 0){
         if (argsct > 3){
           fprintf(stderr, "setenv: Too many arguments.\n");
@@ -170,13 +158,13 @@ int sh( int argc, char **argv, char **envp ){
           if (argsct == 1){
             printenv(argsct, environ, args);
           }
-          else if(argsct == 2){ //set args[1] to environment variable as " "
+          else if(argsct == 2){ 
             setenv(args[1], " ", 1);
-            if (strcmp(args[1], "HOME") == 0){ //change homedir
+            if (strcmp(args[1], "HOME") == 0){
               homedir = " ";
             }
           }
-          else if (argsct == 3){ //set environment variable args[1] to args[2]
+          else if (argsct == 3){ 
             setenv(args[1], args[2], 1);
             if (strcmp(args[1], "HOME") == 0) {
                     homedir = getenv("HOME");
@@ -188,7 +176,7 @@ int sh( int argc, char **argv, char **envp ){
         }
       }
 
-      //cd
+      //cd command
       else if (strcmp(args[0], "cd") == 0){
         if (argsct > 2){
           fprintf(stderr, "cd: Too many arguments.\n");
@@ -196,16 +184,16 @@ int sh( int argc, char **argv, char **envp ){
         else{
           int success = 0;
           printf("Executing built-in cd\n");
-          if (argsct == 1){ //no arguments
+          if (argsct == 1){ 
             success = cd(homedir);
           }
-          else if (strcmp(args[1], "-") == 0){ //go to previous directory
+          else if (strcmp(args[1], "-") == 0){ 
             success = cd(owd);
           }
           else{
             success = cd(args[1]);
           }
-          if (success){ //change owd and cwd if cd worked
+          if (success){ 
             free(owd);
             owd = pwd;
             pwd = getcwd(NULL, PATH_MAX+1);
@@ -213,24 +201,24 @@ int sh( int argc, char **argv, char **envp ){
         }
       }
 
-      //printenv
+      //printenv command
       else if (strcmp(args[0], "printenv") == 0){
         printenv(argsct, envp, args);
       }
 
-      //prompt
+      //prompt command
       else if (strcmp(args[0], "prompt") == 0){
         if (argsct > 2){
           fprintf(stderr, "prompt: too many arguments.\n");
         }
         else{
           printf("Executing built-in prompt\n");
-          if (argsct == 1){ //no arguments, input prompt
+          if (argsct == 1){ 
             printf("Input prompt prefix: ");
             if (!fgets(prompt + 1, BUFSIZ, stdin))
               fprintf(stderr, "fgets error\n");
             size_t p_len = strlen(prompt);
-            if (prompt[p_len - 1] == '\n') //change /n to /0
+            if (prompt[p_len - 1] == '\n') 
               prompt[p_len - 1] = ' ';
           }
           else if (argsct == 2){
@@ -239,7 +227,7 @@ int sh( int argc, char **argv, char **envp ){
         }
       }
 
-      //pwd
+      //pwd command
       else if (strcmp(args[0], "pwd") == 0){
         printf("Executing built-in pwd\n");
         if (argsct > 1){
@@ -250,13 +238,25 @@ int sh( int argc, char **argv, char **envp ){
         free(wd);
       }
 
-      //pid
+      //pid command
       else if (strcmp(args[0], "pid") == 0){
         printf("Executing built-in pid\n");
         if (argsct > 1){
           fprintf(stderr, "pid: ignoring non-option arguments.\n");
         }
         printPid();
+      }
+
+      //wildcards
+      else if(strchr(arg,'*') != NULL || strchr(arg,'?') != NULL){
+        wordexp_t p;
+        char **wild;
+        int place;
+        wordexp(arg, &p, 0);
+        for(place = argsct; place< p.we_wordc; place++){
+          printf("%s\n", wild[place]);
+        }
+        wordfree(&p);
       }
 
       //running programs and not built in commands
@@ -317,13 +317,9 @@ int sh( int argc, char **argv, char **envp ){
 
 char *which(char *command, struct pathelement *pathlist )
 {
-   /* loop through pathlist until finding command and return it.  Return
-   NULL when not found. */
   char *cmd = malloc(64);
-  int found = 0; //used to tell whether a path was found or not
+  int found = 0; 
 
-
-  //else, locate command
   while (pathlist) {
     sprintf(cmd, "%s/%s", pathlist->element, command);
     if (access(cmd, X_OK) == 0) {
@@ -333,7 +329,7 @@ char *which(char *command, struct pathelement *pathlist )
     }
     pathlist = pathlist->next;
   }
-  //check if command not found
+
   if (found == 0){
     sprintf(cmd, "%s: Command not found.\n", command);
     return cmd;
@@ -342,13 +338,11 @@ char *which(char *command, struct pathelement *pathlist )
 } /* which() */
 
 char *where(char *command, struct pathelement *pathlist ){
-  /* similarly loop through finding all locations of command */
   char *cmd = calloc(64, sizeof(char*));
   char *test = calloc(256, sizeof(char*));
-  int found = 0; //used to tell whether a path was found or not
-  int built_in = 0; //used to tell whether command is built in or not
+  int found = 0; 
+  int built_in = 0; 
 
-  //check to see if built in command
   if ((strcmp(command, "which") == 0) ||
       (strcmp(command, "where") == 0) ||
       (strcmp(command, "cd") == 0) ||
@@ -363,14 +357,12 @@ char *where(char *command, struct pathelement *pathlist ){
         built_in = 1;
       }
 
-  //else, locate command
   while (pathlist) {
     sprintf(test, "%s/%s", pathlist->element, command);
     if (access(test, X_OK) == 0){
       char *toAppend = malloc(64);
       sprintf(toAppend, "%s%s\n", cmd, test);
       sprintf(cmd, "%s", toAppend);
-      //sprintf(cmd, "%s%s/%s\n", cmd, pathlist->element, command);
       found = 1;
       free(toAppend);
     }
@@ -423,11 +415,11 @@ void printenv(int argsct, char **envp, char **args){
   }
 }
 
-void printPid(){ //prints out current process pid
+void printPid(){ 
   printf("%d\n", getpid());
 }
 
-int cd(char *directory){ //return an int to tell if chdir worked
+int cd(char *directory){
   if (chdir(directory) < 0){
     printf("%s: no such file or directory\n", directory);
     return 0;
