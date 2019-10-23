@@ -262,9 +262,6 @@ int sh( int argc, char **argv, char **envp ){
 
       //running programs and not built in commands
       else{
-        // int pid;
-        // pid = fork();
-        // if(pid == 0){
           char *cmd_path;
           if(strchr(arg,'.') != NULL || strchr(arg,'/') != NULL){
             cmd_path = (char *) malloc((strlen(args[0])+1)*sizeof(char));
@@ -323,26 +320,6 @@ int sh( int argc, char **argv, char **envp ){
 
             }
           }
-          // printf("exited\n");
-          // arrayFree(args);
-          // free(args);
-          // free(pathlist->element);
-          // listFree(pathlist);
-          // free(arg);
-          // free(prompt);
-          // free(pwd);
-          // free(owd);
-          // free(cmd_path);
-          // exit(pid);
-          
-        // }
-        // else if(pid != 0){
-        //   waitpid(pid,NULL,0);
-        // }
-        // else{
-        //   printf("Command not found: %s\n",args[0]);
-
-        // }
       }
       arrayFree(args);
       free(args);
