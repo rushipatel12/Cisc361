@@ -1,3 +1,8 @@
+/**
+  * In this file we implmented the methods from the sh.h file and this file gets called in the main.c
+  * file and gets return.
+  * Each method is used to create this fully working shell.
+ **/
 #include <stdio.h>
 #include <string.h>
 #include <strings.h>
@@ -15,6 +20,13 @@
 
 extern char **environ;
 
+/**
+ * The sh method takes in three parameters of type int and char. This method then goes into a loop
+ * and checks the user input against various conditions to see if it can execute it and if a condition is met
+ * the command is executed or the program is ran. 
+ * There are many side effects in calling this method as it allocates memory on the heap implicitly and explicitly. 
+ * By the end of this function all of the side effects are taken care of.
+ **/
 int sh( int argc, char **argv, char **envp ){
   char *prompt = calloc(PROMPTMAX, sizeof(char));
   char *command, *commandpath, *p, *pwd, *owd;
@@ -35,8 +47,7 @@ int sh( int argc, char **argv, char **envp ){
   memcpy(owd, pwd, strlen(pwd));
   prompt[0] = ' '; prompt[1] = '\0';
 
-  /* Put PATH into a linked list */
-
+  //takes the input and splits it into and array and checks the input with the conditions
   while (go){
     pathlist = get_path();
     printf("[%s]%s",pwd,prompt);
@@ -249,21 +260,21 @@ int sh( int argc, char **argv, char **envp ){
 
       //wildcards
       else if(strchr(arg,'*') != NULL || strchr(arg,'?') != NULL){
-        wordexp_t p;
+        wordexp_t a;
         char **wild;
         int place;
-        wordexp(arg, &p, 0);
-        wild = p.we_wordv;
-        for(place = argsct; place< p.we_wordc; place++){
+        wordexp(arg, &a, 0);
+        wild = a.we_wordv;
+        for(place = argsct; place< a.we_wordc; place++){
           printf("%s\n", wild[place]);
         }
-        wordfree(&p);
+        wordfree(&a);
       }
 
       //running programs and not built in commands
       else{
           char *cmd_path;
-          if(args[0][0] == '.' || args[0][0] == '/' ){
+          if(args[0][0] == '.' || args[0][0] == '/' ){//if the command is a directory or an executable
             cmd_path = (char *) malloc((strlen(args[0])+1)*sizeof(char));
             strcpy(cmd_path,args[0]);
             pid_t pid;
@@ -290,7 +301,7 @@ int sh( int argc, char **argv, char **envp ){
             }
             free(cmd_path);
           }
-          else{
+          else{//if it is command
             cmd_path = which(args[0],pathlist);
             cmd_path[strlen(cmd_path)-1] = '\0';
             if(access(cmd_path,X_OK) == 0){
@@ -334,6 +345,11 @@ int sh( int argc, char **argv, char **envp ){
     return 0;
 } /* sh() */
 
+/**
+ * The which method takes in two parameters of type char and struct pathelement. This method then goes into a loop
+ * and checks the command to see if it is in the pathlist and if it is found it returns it. 
+ * There are no side effects.
+ **/
 char *which(char *command, struct pathelement *pathlist )
 {
   char *cmd = malloc(64);
@@ -356,6 +372,11 @@ char *which(char *command, struct pathelement *pathlist )
   return cmd;
 } /* which() */
 
+/**
+ * The where method takes in two parameters of type char and struct pathelement. This method then goes into a loop
+ * and checks the command to see if it is in the pathlist and if it is found it returns all of the locations of it. 
+ * There are side effects explicitly but are taken care of by the end.
+ **/
 char *where(char *command, struct pathelement *pathlist ){
   char *cmd = calloc(64, sizeof(char*));
   char *test = calloc(256, sizeof(char*));
@@ -397,6 +418,10 @@ char *where(char *command, struct pathelement *pathlist ){
 
 } /* where() */
 
+/**
+ * The list method takes in one parameter of type char. This method then goes into a loop and prints
+ * everything in the current directory. There are side effects implicitly and explicitly but are taken care of by the end.
+ **/
 void list(char *directory){
   DIR *mydirectory;
   struct dirent *file;
@@ -414,6 +439,10 @@ void list(char *directory){
   free(mydirectory);
 }
 
+/**
+ * The printenv method takes in three parameters of type int and char. This method then goes into a loop and prints
+ * the environment. There are no side effects.
+ **/
 void printenv(int argsct, char **envp, char **args){
   if (argsct == 1)
   {
@@ -434,10 +463,18 @@ void printenv(int argsct, char **envp, char **args){
   }
 }
 
+/**
+ * The pid method takes in no parameters. This method then prints the process id.
+ * There are no side effects.
+ **/
 void printPid(){ 
   printf("%d\n", getpid());
 }
 
+/**
+ * The cd method takes in one parameter of type char. This method then tries to change the directory.
+ * If it was successful it returns 1 otherwise a 0. There are no side effects.
+ **/
 int cd(char *directory){
   if (chdir(directory) < 0){
     printf("%s: no such file or directory\n", directory);
@@ -446,17 +483,23 @@ int cd(char *directory){
   return 1;
 }
 
+/**
+ * The listFree method takes in one parameter of type struct pathelement. This method then goes into a loop and frees
+ * the linked list. There are no side effects.
+ **/
 void listFree(struct pathelement *first){
   struct pathelement* tmp = NULL;
-   while (first != NULL)
-    {
-       tmp = first;
-       first = first->next;
-       free(tmp);
-    }
-
+  while (first != NULL){
+    tmp = first;
+    first = first->next;
+    free(tmp);
+  }
 }
 
+/**
+ * The arrayFree method takes in one parameter of type char. This method then goes into a loop and frees
+ * the 2D array. There are no side effects.
+ **/
 void arrayFree(char **array){
   int i = 0;
   while(array[i] != NULL){
@@ -465,6 +508,11 @@ void arrayFree(char **array){
   }
 }
 
+/**
+ * The stringToArray method takes in one parameter of type char. This method then takes the input and
+ * uses strtok to break the commands into an array of character arrays and returns it.
+ * There are side effects implicitly and explicitly but are taken care of by the end.
+ **/
 char **stringToArray(char *input){
   char buf[BUFSIZ];
   strcpy(buf,input);
