@@ -263,7 +263,7 @@ int sh( int argc, char **argv, char **envp ){
       //running programs and not built in commands
       else{
           char *cmd_path;
-          if(args[0][0] == '.' || args[0][0] == '/'){
+          if(strcmp(&args[0][0], ".") == 0 || strcmp(&args[0][0], "/") == 0 ){
             cmd_path = (char *) malloc((strlen(args[0])+1)*sizeof(char));
             strcpy(cmd_path,args[0]);
             pid_t pid;
