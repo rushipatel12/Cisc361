@@ -282,7 +282,6 @@ int sh( int argc, char **argv, char **envp ){
               free(prompt);
               free(pwd);
               free(owd);
-              free(cmd_path);
               exit(pid);
             }
             else if(pid != 0){
@@ -291,6 +290,7 @@ int sh( int argc, char **argv, char **envp ){
             else{
               printf("Command not found: %s\n",args[0]);
             }
+            free(cmd_path);
           }
           else{
             cmd_path = which(args[0],pathlist);
@@ -309,7 +309,6 @@ int sh( int argc, char **argv, char **envp ){
                 free(prompt);
                 free(pwd);
                 free(owd);
-                free(cmd_path);
                 exit(pid);
               }
               else if(pid != 0){
@@ -318,6 +317,8 @@ int sh( int argc, char **argv, char **envp ){
               else{
                 printf("Command not found: %s\n",args[0]);
               }
+              free(cmd_path);
+
             }
           }
           // printf("exited\n");
