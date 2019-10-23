@@ -253,6 +253,7 @@ int sh( int argc, char **argv, char **envp ){
         char **wild;
         int place;
         wordexp(arg, &p, 0);
+        wild = p.we_wordv;
         for(place = argsct; place< p.we_wordc; place++){
           printf("%s\n", wild[place]);
         }
